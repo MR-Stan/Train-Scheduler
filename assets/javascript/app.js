@@ -1,28 +1,45 @@
-let appObject = {
+// initialize firebase
+let firebaseConfig = {
+    apiKey: "AIzaSyAAtzkJGflxsAb44qVuxYJgt_wC5S29wQo",
+    authDomain: "train-scheduler-9d172.firebaseapp.com",
+    databaseURL: "https://train-scheduler-9d172.firebaseio.com",
+    projectId: "train-scheduler-9d172",
+    storageBucket: "train-scheduler-9d172.appspot.com",
+    messagingSenderId: "258198591612",
+    appId: "1:258198591612:web:a5e709bdd8b9111d7a11f9",
+    measurementId: "G-K5BZY1KMVZ"
+}
 
-    database : firebase.database,
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+let database = firebase.database();
+
+database.ref().on("child_added", function (snapshot) {
+    let check = false;
+    if (snapshot.val().firstTrain != "" && snapshot.val().frequency != "") {
+        let time = moment(snapshot.val().firstTrain, "h:mm");
+        while (!check) {
+            if (moment().isAfter(time)) {
+                time.add(snapshot.val().frequency, 'minutes');
+            } 
+            else {
+                check = true;
+            }
+        }
+        appObject.arrivalTime = time.format("h:mm a");
+        appObject.minutesAway = moment(appObject.arrivalTime, "h:mm a").fromNow(true);
+    }
+});
+
+let appObject = {
 
     nextArrival : "null",
 
     minutesAway : "null",
 
-    // initialize firebase
-    config : {
-        apiKey: "AIzaSyAAtzkJGflxsAb44qVuxYJgt_wC5S29wQo",
-        authDomain: "train-scheduler-9d172.firebaseapp.com",
-        databaseURL: "https://train-scheduler-9d172.firebaseio.com",
-        projectId: "train-scheduler-9d172",
-        storageBucket: "train-scheduler-9d172.appspot.com",
-        messagingSenderId: "258198591612",
-        appId: "1:258198591612:web:a5e709bdd8b9111d7a11f9",
-        measurementId: "G-K5BZY1KMVZ"
-    },
-
     initialize : function() {
-        firebase.initializeApp(this.config);
-        firebase.analytics();
         this.clock();
-        this.childAdded();
     },
 
     // displays current time
@@ -69,25 +86,6 @@ let appObject = {
         $("#firstTrain").val("");
         $("#frequency").val("");
     },
-
-    childAdded : function() {
-        appObject.database.ref().on("child_added", function (snapshot) {
-            let check = false;
-            if (snapshot.val().firstTrain != "" && snapshot.val().frequency != "") {
-                let time = moment(snapshot.val().firstTrain, "h:mm");
-                while (!check) {
-                    if (moment().isAfter(time)) {
-                        time.add(snapshot.val().frequency, 'minutes');
-                    } 
-                    else {
-                        check = true;
-                    }
-                }
-                appObject.arrivalTime = time.format("h:mm a");
-                appObject.minutesAway = moment(arrivalTime, "h:mm a").fromNow(true);
-            }
-        });
-    }
 }
 
 appObject.initialize();
