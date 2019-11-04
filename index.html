@@ -13,13 +13,13 @@
     </head>
     <body>
         <div class="container">
-            <div class="jumbotron text-center bg-info text-white">
+            <div class="jumbotron text-center bg-info text-white" id="header">
                 <h1>Train Scheduler</h1>
                 <br>
                 <h4 id="clock"></h4>
             </div>
             <!-- current schedule -->
-            <div class="panel panel-warning text-info">
+            <div class="panel panel-warning text-info" id="currentTrains">
                 <div class="panel-heading">
                     <h3>Train Schedule</h3>
                 </div>
@@ -41,26 +41,27 @@
                 </div>
             </div>
             <!-- add new train -->
-            <div class="panel panel-info text-info">
+            <div class="panel panel-info text-info" id="newTrain">
                 <div class="panel-heading">
-                    <h3>Add Train</h3>
+                    <h3>Add New Train</h3>
+                    <hr>
                 </div>
                 <div class="panel-body">
                     <form>
                         <div class="form-group">
-                            <label for="text">Train Name</label>
+                            <label for="text">Train Name:</label>
                             <input type="text" class="form-control" id="train">
                         </div>
                         <div class="form-group">
-                            <label for="text">Destination</label>
+                            <label for="text">Destination:</label>
                             <input type="text" class="form-control" id="destination">
                         </div>
                         <div class="form-group">
-                            <label for="text">First Train Time (HH:MM - Military Time)</label>
+                            <label for="text">First Train Time (HH:MM - Military Time):</label>
                             <input type="text" class="form-control" id="firstTrain">
                         </div>
                         <div class="form-group">
-                            <label for="text">Frequency(min)</label>
+                            <label for="text">Frequency (min):</label>
                             <input type="text" class="form-control" id="frequency">
                         </div>
                         <button type="submit" class="btn btn-info" id="addTrain">Add Train</button>

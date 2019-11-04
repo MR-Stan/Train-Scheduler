@@ -19,8 +19,10 @@ let arrivalTime = "null"
 
 let minutesAway = "null"
 
+// when something is added to the database
 database.ref().on("child_added", function (snapshot) {
     let check = false;
+    // checking that values aren't blank
     if (snapshot.val().firstTrain != "" && snapshot.val().frequency != "") {
         let time = moment(snapshot.val().firstTrain, "h:mm");
         while (!check) {
@@ -45,9 +47,9 @@ database.ref().on("child_added", function (snapshot) {
     }
 });
 
+// when add train button is clicked
 $("#addTrain").on("click", function(event) {
     event.preventDefault();
-
     // pushing input data to firebase
     database.ref().push({
     train : $("#train").val().trim(),
@@ -56,7 +58,6 @@ $("#addTrain").on("click", function(event) {
     firstTrain : $("#firstTrain").val().trim(),
     dateAdded : firebase.database.ServerValue.TIMESTAMP
     });
-
     // clearing input fields
     $("#train").val("");
     $("#destination").val("");
@@ -65,15 +66,11 @@ $("#addTrain").on("click", function(event) {
 
 });
 
-
-
-
-
 // displays current time
 function clock() {
     let clock = moment().format("h:mm:ss a")
     $("#clock").text("Current Time: " + clock);
-
+    // updates clock every second
     setInterval(function() {
         this.clock();
     }, 1000);
